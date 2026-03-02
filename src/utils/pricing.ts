@@ -12,6 +12,7 @@ import { DexLens } from "../../generated/LBPair/DexLens";
 import { loadBundle, loadToken } from "../entities";
 
 export function getAvaxPriceInUSD(): BigDecimal {
+  return BIG_DECIMAL_ONE; // todo: enable when JOE_DEX_LENS_ADDRESS is ready
   const dexLens = DexLens.bind(JOE_DEX_LENS_ADDRESS);
 
   const priceUsdResult = dexLens.try_getTokenPriceUSD(WAVAX_ADDRESS);
@@ -29,6 +30,7 @@ export function getAvaxPriceInUSD(): BigDecimal {
 }
 
 export function getTokenPriceInAVAX(token: Token): BigDecimal {
+  return BIG_DECIMAL_ONE; // todo: enable when JOE_DEX_LENS_ADDRESS is ready
   const dexLens = DexLens.bind(JOE_DEX_LENS_ADDRESS);
 
   const tokenAddress = Address.fromString(token.id);
@@ -38,7 +40,7 @@ export function getTokenPriceInAVAX(token: Token): BigDecimal {
   if (priceInAvaxResult.reverted) {
     log.warning(
       "[getTokenPriceInAVAX] dexLens.getTokenPriceNative() reverted for token {}",
-      [token.id]
+      [token.id],
     );
     return BIG_DECIMAL_ZERO;
   }
@@ -95,7 +97,7 @@ export function getTrackedLiquidityUSD(
   tokenXAmount: BigDecimal,
   tokenX: Token,
   tokenYAmount: BigDecimal,
-  tokenY: Token
+  tokenY: Token,
 ): BigDecimal {
   const bundle = loadBundle();
   const priceXUSD = tokenX.derivedAVAX.times(bundle.avaxPriceUSD);
@@ -118,7 +120,7 @@ export function getTrackedVolumeUSD(
   tokenXAmount: BigDecimal,
   tokenX: Token,
   tokenYAmount: BigDecimal,
-  tokenY: Token
+  tokenY: Token,
 ): BigDecimal {
   const bundle = loadBundle();
   const priceXUSD = tokenX.derivedAVAX.times(bundle.avaxPriceUSD);
@@ -141,7 +143,7 @@ export function getPriceYOfBin(
   binId: number,
   binStep: BigInt,
   tokenX: Token,
-  tokenY: Token
+  tokenY: Token,
 ): BigDecimal {
   const BASIS_POINT_MAX = new BigDecimal(BigInt.fromI32(10_000));
   const BIN_STEP = new BigDecimal(binStep);

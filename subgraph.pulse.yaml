@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: LBFactory
-    network: {{ network }}
+    network: pulse
     source:
-      address: "{{ lbfactory_address }}"
+      address: "0xB12D6A59b6A503EF76b481D5Df521019711E3618"
       abi: LBFactory
-      startBlock: {{ start_block }}
+      startBlock: 25339730
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -46,10 +46,10 @@ dataSources:
 
   - kind: ethereum/contract
     name: LBPair
-    network: {{ network }}
+    network: pulse
     source:
       abi: LBPair
-      startBlock: {{ start_block }}
+      startBlock: 25339730
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

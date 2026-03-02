@@ -2,10 +2,10 @@ import { Bundle } from "../../generated/schema";
 import { getAvaxPriceInUSD } from "../utils";
 
 export function loadBundle(): Bundle {
-  let bundle = Bundle.load("1");
+  let bundle = Bundle.load("avaxPriceUSD");
 
   if (bundle === null) {
-    bundle = new Bundle("1");
+    bundle = new Bundle("avaxPriceUSD");
     bundle.avaxPriceUSD = getAvaxPriceInUSD();
     bundle.save();
   }
