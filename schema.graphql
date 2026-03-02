@@ -1,11 +1,11 @@
-type Bundle @entity {
+type Bundle @entity(immutable: false) {
   id: ID!
 
   # price of AVAX usd
   avaxPriceUSD: BigDecimal!
 }
 
-type LBFactory @entity {
+type LBFactory @entity(immutable: false) {
   # Contract address
   id: ID!
 
@@ -61,7 +61,7 @@ type LBFactory @entity {
   dayData: [TraderJoeDayData!]! @derivedFrom(field: "factory")
 }
 
-type TraderJoeHourData @entity {
+type TraderJoeHourData @entity(immutable: false) {
   # timestamp / 3600
   id: ID!
 
@@ -86,7 +86,7 @@ type TraderJoeHourData @entity {
   txCount: BigInt!
 }
 
-type TraderJoeDayData @entity {
+type TraderJoeDayData @entity(immutable: false) {
   # timestamp / 86400
   id: ID!
 
@@ -111,7 +111,7 @@ type TraderJoeDayData @entity {
   txCount: BigInt!
 }
 
-type Token @entity {
+type Token @entity(immutable: false) {
   # token address
   id: ID!
 
@@ -167,7 +167,7 @@ type Token @entity {
   quotePairsDayData: [LBPairDayData!]! @derivedFrom(field: "tokenY")
 }
 
-type TokenHourData @entity {
+type TokenHourData @entity(immutable: false) {
   # timestamp / 3600
   id: ID!
 
@@ -205,7 +205,7 @@ type TokenHourData @entity {
   close: BigDecimal!
 }
 
-type TokenDayData @entity {
+type TokenDayData @entity(immutable: false) {
   # timestamp / 86400
   id: ID!
 
@@ -243,7 +243,7 @@ type TokenDayData @entity {
   close: BigDecimal!
 }
 
-type SJoeDayData @entity {
+type SJoeDayData @entity(immutable: false) {
   # Timestmap / 86400
   id: ID!
 
@@ -257,7 +257,7 @@ type SJoeDayData @entity {
   collectedUSD: BigDecimal!
 }
 
-type LBPair @entity {
+type LBPair @entity(immutable: false) {
   # Contract address
   id: ID!
 
@@ -322,7 +322,7 @@ type LBPair @entity {
   block: BigInt!
 }
 
-type LBPairParameterSet @entity {
+type LBPairParameterSet @entity(immutable: false) {
   # LBPair address
   id: ID!
   sender: Bytes!
@@ -337,7 +337,7 @@ type LBPairParameterSet @entity {
   maxVolatilityAccumulator: Int!
 }
 
-type Bin @entity {
+type Bin @entity(immutable: false) {
   id: ID! # lbPair address + # + binId
   lbPair: LBPair!
 
@@ -354,7 +354,7 @@ type Bin @entity {
   liquidityProviderCount: BigInt!
 }
 
-type User @entity {
+type User @entity(immutable: false) {
   # Address
   id: ID!
 
@@ -368,7 +368,7 @@ type User @entity {
   collects: [Collect!]! @derivedFrom(field: "recipient")
 }
 
-type LBPairDayData @entity {
+type LBPairDayData @entity(immutable: false) {
   # timestamp / 86400
   id: ID!
 
@@ -403,7 +403,7 @@ type LBPairDayData @entity {
   feesUSD: BigDecimal!
 }
 
-type LBPairHourData @entity {
+type LBPairHourData @entity(immutable: false) {
   # timestamp / 3600
   id: ID!
 
@@ -438,7 +438,7 @@ type LBPairHourData @entity {
   feesUSD: BigDecimal!
 }
 
-type LiquidityPosition @entity {
+type LiquidityPosition @entity(immutable: false) {
   # lbPair address + user address
   id: ID!
   user: User!
@@ -454,7 +454,7 @@ type LiquidityPosition @entity {
   timestamp: Int!
 }
 
-type UserBinLiquidity @entity {
+type UserBinLiquidity @entity(immutable: false) {
   # lbPair address + user + binId
   id: ID!
 
@@ -473,7 +473,7 @@ type UserBinLiquidity @entity {
   timestamp: Int!
 }
 
-type Transaction @entity {
+type Transaction @entity(immutable: true) {
   # transaction hash
   id: ID!
 
@@ -489,7 +489,7 @@ type Transaction @entity {
   transfers: [Transfer!]! @derivedFrom(field: "transaction")
 }
 
-type Mint @entity {
+type Mint @entity(immutable: true) {
   # transaction hash + "#" + index in mints Transaction array
   id: ID!
   transaction: Transaction!
@@ -513,7 +513,7 @@ type Mint @entity {
   logIndex: BigInt!
 }
 
-type Burn @entity {
+type Burn @entity(immutable: true) {
   # transaction hash + "#" + index in burns Transaction array
   id: ID!
   transaction: Transaction!
@@ -537,7 +537,7 @@ type Burn @entity {
   logIndex: BigInt!
 }
 
-type Swap @entity {
+type Swap @entity(immutable: true) {
   # transaction hash + "#" + index in swaps Transaction array
   id: ID!
   transaction: Transaction!
@@ -564,7 +564,7 @@ type Swap @entity {
   logIndex: BigInt!
 }
 
-type Flash @entity {
+type Flash @entity(immutable: true) {
   # transaction hash + "#" + index in Flash Transaction array
   id: ID!
   transaction: Transaction!
@@ -588,7 +588,7 @@ type Flash @entity {
   logIndex: BigInt!
 }
 
-type Collect @entity {
+type Collect @entity(immutable: true) {
   # transaction hash + "#" + index in collect Transaction array
   id: ID!
   transaction: Transaction!
@@ -609,7 +609,7 @@ type Collect @entity {
 }
 
 # indexes both TransferSingle and TransferBatch events
-type Transfer @entity {
+type Transfer @entity(immutable: true) {
   # transaction hash + "#" + index in transfer Transaction array + "#" + (optional: TransferBatch index)
   id: ID!
   transaction: Transaction!

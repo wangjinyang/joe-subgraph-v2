@@ -17,10 +17,10 @@ export const BIG_INT_ZERO = BigInt.fromI32(0);
 export const NULL_CALL_RESULT_VALUE =
   "0x0000000000000000000000000000000000000000000000000000000000000001";
 
-export const LBFACTORY_ADDRESS = Address.fromString('0xDC8d77b69155c7E68A95a4fb0f06a71FF90B943a');
+export const LBFACTORY_ADDRESS = Address.fromString('0x1886D09C9Ade0c5DB822D85D21678Db67B6c2982');
 
-export const JOE_DEX_LENS_ADDRESS = Address.fromString('0x3008D2C0A3b7C676ff8bd948fdE9B5fC6a26A56f');
+export const JOE_DEX_LENS_ADDRESS = Address.fromString('0xf450749aeA1c5feF27Ae0237C56FecC43f6bE244');
 
-export const JOE_DEX_LENS_USD_DECIMALS = BigDecimal.fromString("1e18");
+export const JOE_DEX_LENS_USD_DECIMALS = BigDecimal.fromString("1e6");
 
-export const WAVAX_ADDRESS = Address.fromString('0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2');
+export const WAVAX_ADDRESS = Address.fromString('0x82aF49447D8a07e3bd95BD0d56f35241523fBab1');
