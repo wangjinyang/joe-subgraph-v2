@@ -1,6 +1,7 @@
 import { BigInt, ethereum, store } from "@graphprotocol/graph-ts";
 import { UserBinLiquidity, LBPair, User } from "../../generated/schema";
 import { BIG_INT_ZERO } from "../constants";
+import { loadBin } from "./bin";
 
 export function getUserBinLiquidity(
   liquidityPositionsId: string,
@@ -9,8 +10,8 @@ export function getUserBinLiquidity(
   binId: BigInt,
   block: ethereum.Block
 ): UserBinLiquidity {
-  const id = liquidityPositionsId.concat("-").concat(binId.toString());
-  const lbPairBinId = lbPair.id.concat("#").concat(binId.toString());
+  const id = liquidityPositionsId.concat("-").concat(binId.toU32().toString());
+  const lbPairBin = loadBin(lbPair, binId.toU32());
 
   let userBinLiquidity = UserBinLiquidity.load(id);
 
@@ -19,7 +20,7 @@ export function getUserBinLiquidity(
     userBinLiquidity.lbPair = lbPair.id;
     userBinLiquidity.user = user.id;
     userBinLiquidity.binId = binId;
-    userBinLiquidity.lbPairBinId = lbPairBinId;
+    userBinLiquidity.lbPairBinId = lbPairBin.id;
     userBinLiquidity.liquidityPosition = liquidityPositionsId;
     userBinLiquidity.liquidity = BIG_INT_ZERO;
     userBinLiquidity.block = block.number.toI32();
