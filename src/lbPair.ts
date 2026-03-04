@@ -580,8 +580,9 @@ export function handleLiquidityAdded(event: DepositedToBins): void {
   const tokenX = loadToken(Address.fromString(lbPair.tokenX));
   const tokenY = loadToken(Address.fromString(lbPair.tokenY));
 
-  const totalAmountX = BigDecimal.fromString("0");
-  const totalAmountY = BigDecimal.fromString("0");
+  // total amounts
+  let totalAmountX = BIG_INT_ZERO;
+  let totalAmountY = BIG_INT_ZERO;
 
   for (let i = 0; i < event.params.ids.length; i++) {
     const bidId = event.params.ids[i];
@@ -590,8 +591,8 @@ export function handleLiquidityAdded(event: DepositedToBins): void {
     const amountX = formatTokenAmountByDecimals(amounts[0], tokenX.decimals);
     const amountY = formatTokenAmountByDecimals(amounts[1], tokenY.decimals);
 
-    totalAmountX.plus(amountX);
-    totalAmountY.plus(amountY);
+    totalAmountX = totalAmountX.plus(amounts[0]);
+    totalAmountY = totalAmountY.plus(amounts[1]);
 
     trackBin(
       lbPair,
@@ -612,8 +613,8 @@ export function handleLiquidityAdded(event: DepositedToBins): void {
 
   // LBPair
   lbPair.txCount = lbPair.txCount.plus(BIG_INT_ONE);
-  lbPair.reserveX = lbPair.reserveX.plus(totalAmountX);
-  lbPair.reserveY = lbPair.reserveY.plus(totalAmountY);
+  lbPair.reserveX = lbPair.reserveX.plus(totalAmountX.toBigDecimal());
+  lbPair.reserveY = lbPair.reserveY.plus(totalAmountY.toBigDecimal());
 
   lbPair.totalValueLockedAVAX = lbPair.reserveX
     .times(tokenX.derivedAVAX)
@@ -656,7 +657,7 @@ export function handleLiquidityAdded(event: DepositedToBins): void {
 
   // TokenX
   tokenX.txCount = tokenX.txCount.plus(BIG_INT_ONE);
-  tokenX.totalValueLocked = tokenX.totalValueLocked.plus(totalAmountX);
+  tokenX.totalValueLocked = tokenX.totalValueLocked.plus(totalAmountX.toBigDecimal());
   tokenX.totalValueLockedUSD = tokenX.totalValueLocked.times(
     tokenX.derivedAVAX.times(bundle.avaxPriceUSD)
   );
@@ -664,7 +665,7 @@ export function handleLiquidityAdded(event: DepositedToBins): void {
 
   // TokenY
   tokenY.txCount = tokenY.txCount.plus(BIG_INT_ONE);
-  tokenY.totalValueLocked = tokenY.totalValueLocked.plus(totalAmountY);
+  tokenY.totalValueLocked = tokenY.totalValueLocked.plus(totalAmountY.toBigDecimal());
   tokenY.totalValueLockedUSD = tokenY.totalValueLocked.times(
     tokenY.derivedAVAX.times(bundle.avaxPriceUSD)
   );
@@ -697,12 +698,19 @@ export function handleLiquidityRemoved(event: WithdrawnFromBins): void {
   const tokenX = loadToken(Address.fromString(lbPair.tokenX));
   const tokenY = loadToken(Address.fromString(lbPair.tokenY));
 
+  // total amounts
+  let totalAmountX = BIG_INT_ZERO;
+  let totalAmountY = BIG_INT_ZERO;
+
   // track bins
   for (let i = 0; i < event.params.amounts.length; i++) {
     const val = event.params.amounts[i];
     const amounts = decodeAmounts(val);
     const fmtAmountX = formatTokenAmountByDecimals(amounts[0], tokenX.decimals);
     const fmtAmountY = formatTokenAmountByDecimals(amounts[1], tokenY.decimals);
+
+    totalAmountX = totalAmountX.plus(amounts[0]);
+    totalAmountY = totalAmountY.plus(amounts[1]);
 
     trackBin(
       lbPair,
@@ -716,14 +724,6 @@ export function handleLiquidityRemoved(event: WithdrawnFromBins): void {
     );
   }
 
-  // total amounts
-  const totalAmountX = event.params.amounts
-    .reduce((acc, val) => acc.plus(decodeAmounts(val)[0]), BIG_INT_ZERO)
-    .toBigDecimal();
-  const totalAmountY = event.params.amounts
-    .reduce((acc, val) => acc.plus(decodeAmounts(val)[1]), BIG_INT_ZERO)
-    .toBigDecimal();
-
   // reset tvl aggregates until new amounts calculated
   lbFactory.totalValueLockedAVAX = lbFactory.totalValueLockedAVAX.minus(
     lbPair.totalValueLockedAVAX
@@ -731,8 +731,8 @@ export function handleLiquidityRemoved(event: WithdrawnFromBins): void {
 
   // LBPair
   lbPair.txCount = lbPair.txCount.plus(BIG_INT_ONE);
-  lbPair.reserveX = lbPair.reserveX.minus(totalAmountX);
-  lbPair.reserveY = lbPair.reserveY.minus(totalAmountY);
+  lbPair.reserveX = lbPair.reserveX.minus(totalAmountX.toBigDecimal());
+  lbPair.reserveY = lbPair.reserveY.minus(totalAmountY.toBigDecimal());
 
   lbPair.totalValueLockedAVAX = lbPair.reserveX
     .times(tokenX.derivedAVAX)
@@ -775,7 +775,7 @@ export function handleLiquidityRemoved(event: WithdrawnFromBins): void {
 
   // TokenX
   tokenX.txCount = tokenX.txCount.plus(BIG_INT_ONE);
-  tokenX.totalValueLocked = tokenX.totalValueLocked.minus(totalAmountX);
+  tokenX.totalValueLocked = tokenX.totalValueLocked.minus(totalAmountX.toBigDecimal());
   tokenX.totalValueLockedUSD = tokenX.totalValueLocked.times(
     tokenX.derivedAVAX.times(bundle.avaxPriceUSD)
   );
@@ -783,7 +783,7 @@ export function handleLiquidityRemoved(event: WithdrawnFromBins): void {
 
   // TokenY
   tokenY.txCount = tokenY.txCount.plus(BIG_INT_ONE);
-  tokenY.totalValueLocked = tokenY.totalValueLocked.minus(totalAmountY);
+  tokenY.totalValueLocked = tokenY.totalValueLocked.minus(totalAmountY.toBigDecimal());
   tokenY.totalValueLockedUSD = tokenY.totalValueLocked.times(
     tokenY.derivedAVAX.times(bundle.avaxPriceUSD)
   );
