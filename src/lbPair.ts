@@ -137,7 +137,7 @@ export function handleSwap(event: SwapEvent): void {
   // Bin
   const bin = trackBin(
     lbPair as LBPair,
-    event.params.id,
+    BigInt.fromI64(event.params.id).toU32(),
     fmtAmountXIn,
     fmtAmountXOut,
     fmtAmountYIn,
@@ -596,7 +596,7 @@ export function handleLiquidityAdded(event: DepositedToBins): void {
 
     trackBin(
       lbPair,
-      bidId.toI32(),
+      bidId.toU32(),
       amountX, // amountXIn
       BIG_DECIMAL_ZERO,
       amountY, // amountYIn
