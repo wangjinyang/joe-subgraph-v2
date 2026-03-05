@@ -5,7 +5,7 @@ import { loadToken } from "../entities";
 import { getPriceYOfBin } from "../utils";
 
 export function loadBin(lbPair: LBPair, binId: number): Bin {
-  const id = lbPair.id.concat("#").concat(parseInt(binId.toString()).toString());
+  const id = lbPair.id.concat("#").concat(binId.toString());
   let bin = Bin.load(id);
 
   if (!bin) {
