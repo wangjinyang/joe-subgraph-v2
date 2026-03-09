@@ -859,34 +859,38 @@ export function handleTransferBatch(event: TransferBatch): void {
   const transaction = loadTransaction(event);
 
   for (let i = 0; i < event.params.amounts.length; i++) {
+    const id = event.params.ids[i];
+    const amount = event.params.amounts[i];
+    const from = event.params.from;
+    const to = event.params.to;
     removeLiquidityPosition(
       event.address,
-      event.params.from,
-      event.params.ids[i],
-      event.params.amounts[i],
+      from,
+      id,
+      amount,
       event.block
     );
     addLiquidityPosition(
       event.address,
-      event.params.to,
-      event.params.ids[i],
-      event.params.amounts[i],
+      to,
+      id,
+      amount,
       event.block
     );
 
-    const isMint = ADDRESS_ZERO.equals(event.params.from);
-    const isBurn = ADDRESS_ZERO.equals(event.params.to);
+    const isMint = ADDRESS_ZERO.equals(from);
+    const isBurn = ADDRESS_ZERO.equals(to);
 
     // mint: increase bin totalSupply
     if (isMint) {
       trackBin(
         lbPair,
-        event.params.ids[i].toU32(),
+        id.toU32(),
         BIG_DECIMAL_ZERO,
         BIG_DECIMAL_ZERO,
         BIG_DECIMAL_ZERO,
         BIG_DECIMAL_ZERO,
-        event.params.amounts[i], // minted
+        amount, // minted
         BIG_INT_ZERO
       );
     }
@@ -895,13 +899,13 @@ export function handleTransferBatch(event: TransferBatch): void {
     if (isBurn) {
       trackBin(
         lbPair,
-        event.params.ids[i].toU32(),
+        id.toU32(),
         BIG_DECIMAL_ZERO,
         BIG_DECIMAL_ZERO,
         BIG_DECIMAL_ZERO,
         BIG_DECIMAL_ZERO,
         BIG_INT_ZERO,
-        event.params.amounts[i] // burned
+        amount // burned
       );
     }
 
@@ -919,11 +923,11 @@ export function handleTransferBatch(event: TransferBatch): void {
     transfer.batchIndex = i;
     transfer.isMint = isMint;
     transfer.isBurn = isBurn;
-    transfer.binId = event.params.ids[i];
-    transfer.amount = event.params.amounts[i];
+    transfer.binId = id;
+    transfer.amount = amount;
     transfer.sender = event.params.sender;
-    transfer.from = event.params.from;
-    transfer.to = event.params.to;
+    transfer.from = from;
+    transfer.to = to;
     transfer.origin = event.transaction.from;
     transfer.logIndex = event.logIndex;
 

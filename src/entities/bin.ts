@@ -11,7 +11,6 @@ export function loadBin(lbPair: LBPair, binId: number): Bin {
   if (!bin) {
     const tokenX = loadToken(Address.fromString(lbPair.tokenX));
     const tokenY = loadToken(Address.fromString(lbPair.tokenY));
-
     bin = new Bin(id);
     bin.lbPair = lbPair.id;
     bin.binId = binId as u32;

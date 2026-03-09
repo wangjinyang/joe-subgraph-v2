@@ -8,15 +8,15 @@ export function getUserBinLiquidity(
   lbPair: LBPair,
   user: User,
   binId: BigInt,
-  block: ethereum.Block
+  block: ethereum.Block,
 ): UserBinLiquidity {
   const id = liquidityPositionsId.concat("-").concat(binId.toString());
-  const lbPairBin = loadBin(lbPair, binId.toU32());
 
   let userBinLiquidity = UserBinLiquidity.load(id);
 
   if (!userBinLiquidity) {
     userBinLiquidity = new UserBinLiquidity(id);
+    const lbPairBin = loadBin(lbPair, binId.toU32());
     userBinLiquidity.lbPair = lbPair.id;
     userBinLiquidity.user = user.id;
     userBinLiquidity.binId = binId;

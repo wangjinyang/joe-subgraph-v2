@@ -11,11 +11,11 @@ import {
 export function loadLBFactory(id: Address = LBFACTORY_ADDRESS): LBFactory {
   let lbFactory = LBFactory.load(id.toHexString());
   const contract = LBFactoryABI.bind(id);
-  const flashloanFee = contract.try_getFlashLoanFee();
-  const feeRecipient = contract.try_getFeeRecipient();
 
   if (!lbFactory) {
     lbFactory = new LBFactory(id.toHexString());
+    const flashloanFee = contract.try_getFlashLoanFee();
+    const feeRecipient = contract.try_getFeeRecipient();
     lbFactory.pairCount = BIG_INT_ZERO;
     lbFactory.volumeUSD = BIG_DECIMAL_ZERO;
     lbFactory.volumeAVAX = BIG_DECIMAL_ZERO;
