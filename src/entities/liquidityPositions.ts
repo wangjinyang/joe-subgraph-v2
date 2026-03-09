@@ -4,11 +4,7 @@ import { BIG_INT_ZERO, BIG_INT_ONE, ADDRESS_ZERO } from "../constants";
 import { getUserBinLiquidity } from "./userBinLiquidity";
 import { loadUser, loadBin } from "../entities";
 
-function getLiquidityPosition(
-  lbPair: LBPair,
-  user: User,
-  block: ethereum.Block,
-): LiquidityPosition {
+function getLiquidityPosition(lbPair: LBPair, user: User): LiquidityPosition {
   const id = lbPair.id.concat("-").concat(user.id);
 
   let liquidityPosition = LiquidityPosition.load(id);
@@ -29,7 +25,6 @@ export function addLiquidityPosition(
   userAddr: Address,
   binId: BigInt,
   liquidity: BigInt,
-  block: ethereum.Block,
 ): LiquidityPosition | null {
   // skip if 'userAddr' is zero address (mint transaction)
   if (userAddr.equals(ADDRESS_ZERO)) {
@@ -50,13 +45,12 @@ export function addLiquidityPosition(
   const user = loadUser(userAddr);
   const bin = loadBin(lbPair, binId.toU32());
 
-  let liquidityPosition = getLiquidityPosition(lbPair, user, block);
+  let liquidityPosition = getLiquidityPosition(lbPair, user);
   let userBinLiquidity = getUserBinLiquidity(
     liquidityPosition.id,
     lbPair,
     user,
     binId,
-    block,
   );
 
   if (userBinLiquidity.liquidity.equals(BIG_INT_ZERO)) {
@@ -91,7 +85,6 @@ export function removeLiquidityPosition(
   userAddr: Address,
   binId: BigInt,
   liquidity: BigInt,
-  block: ethereum.Block,
 ): LiquidityPosition | null {
   // skip if 'userAddr' is zero address (burn transaction)
   if (userAddr.equals(ADDRESS_ZERO)) {
@@ -112,13 +105,12 @@ export function removeLiquidityPosition(
   const user = loadUser(userAddr);
   const bin = loadBin(lbPair, binId.toU32());
 
-  let liquidityPosition = getLiquidityPosition(lbPair, user, block);
+  let liquidityPosition = getLiquidityPosition(lbPair, user);
   let userBinLiquidity = getUserBinLiquidity(
     liquidityPosition.id,
     lbPair,
     user,
     binId,
-    block,
   );
 
   // update liquidity

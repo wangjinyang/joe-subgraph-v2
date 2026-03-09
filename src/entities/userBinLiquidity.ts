@@ -8,7 +8,6 @@ export function getUserBinLiquidity(
   lbPair: LBPair,
   user: User,
   binId: BigInt,
-  block: ethereum.Block,
 ): UserBinLiquidity {
   const id = liquidityPositionsId.concat("-").concat(binId.toString());
 
