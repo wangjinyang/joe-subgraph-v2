@@ -448,10 +448,6 @@ type LiquidityPosition @entity(immutable: false) {
   userBinLiquidities: [UserBinLiquidity!]!
     @derivedFrom(field: "liquidityPosition")
   binsCount: BigInt!
-
-  # block info
-  block: Int!
-  timestamp: Int!
 }
 
 type UserBinLiquidity @entity(immutable: false) {
@@ -469,8 +465,6 @@ type UserBinLiquidity @entity(immutable: false) {
   binId: BigInt!
   liquidity: BigInt!
 
-  block: Int!
-  timestamp: Int!
 }
 
 type Transaction @entity(immutable: true) {

@@ -7,7 +7,7 @@ import { loadUser, loadBin } from "../entities";
 function getLiquidityPosition(
   lbPair: LBPair,
   user: User,
-  block: ethereum.Block
+  block: ethereum.Block,
 ): LiquidityPosition {
   const id = lbPair.id.concat("-").concat(user.id);
 
@@ -18,8 +18,6 @@ function getLiquidityPosition(
     liquidityPosition.user = user.id;
     liquidityPosition.lbPair = lbPair.id;
     liquidityPosition.binsCount = BIG_INT_ZERO;
-    liquidityPosition.block = block.number.toI32();
-    liquidityPosition.timestamp = block.timestamp.toI32();
     liquidityPosition.save();
   }
 
@@ -31,7 +29,7 @@ export function addLiquidityPosition(
   userAddr: Address,
   binId: BigInt,
   liquidity: BigInt,
-  block: ethereum.Block
+  block: ethereum.Block,
 ): LiquidityPosition | null {
   // skip if 'userAddr' is zero address (mint transaction)
   if (userAddr.equals(ADDRESS_ZERO)) {
@@ -58,7 +56,7 @@ export function addLiquidityPosition(
     lbPair,
     user,
     binId,
-    block
+    block,
   );
 
   if (userBinLiquidity.liquidity.equals(BIG_INT_ZERO)) {
@@ -74,22 +72,15 @@ export function addLiquidityPosition(
 
     // increase LBPair liquidityProviderCount if user now has one bin with liquidity
     if (liquidityPosition.binsCount.equals(BIG_INT_ONE)) {
-      lbPair.liquidityProviderCount = lbPair.liquidityProviderCount.plus(
-        BIG_INT_ONE
-      );
+      lbPair.liquidityProviderCount =
+        lbPair.liquidityProviderCount.plus(BIG_INT_ONE);
       lbPair.save();
     }
+    liquidityPosition.save();
   }
 
   // update liquidity
   userBinLiquidity.liquidity = userBinLiquidity.liquidity.plus(liquidity);
-
-  // update block and timestamp
-  liquidityPosition.block = block.number.toI32();
-  liquidityPosition.timestamp = block.timestamp.toI32();
-  liquidityPosition.save();
-  userBinLiquidity.block = block.number.toI32();
-  userBinLiquidity.timestamp = block.timestamp.toI32();
   userBinLiquidity.save();
 
   return liquidityPosition as LiquidityPosition;
@@ -100,7 +91,7 @@ export function removeLiquidityPosition(
   userAddr: Address,
   binId: BigInt,
   liquidity: BigInt,
-  block: ethereum.Block
+  block: ethereum.Block,
 ): LiquidityPosition | null {
   // skip if 'userAddr' is zero address (burn transaction)
   if (userAddr.equals(ADDRESS_ZERO)) {
@@ -127,7 +118,7 @@ export function removeLiquidityPosition(
     lbPair,
     user,
     binId,
-    block
+    block,
   );
 
   // update liquidity
@@ -140,32 +131,24 @@ export function removeLiquidityPosition(
     if (idxToRemove > -1) {
       liquidityProviders.splice(idxToRemove, 1);
       bin.liquidityProviders = liquidityProviders;
-      bin.liquidityProviderCount = bin.liquidityProviderCount.minus(
-        BIG_INT_ONE
-      );
+      bin.liquidityProviderCount =
+        bin.liquidityProviderCount.minus(BIG_INT_ONE);
       bin.save();
     }
 
     // decrease count of bins with user's liquidityPosition
-    liquidityPosition.binsCount = liquidityPosition.binsCount.minus(
-      BIG_INT_ONE
-    );
+    liquidityPosition.binsCount =
+      liquidityPosition.binsCount.minus(BIG_INT_ONE);
 
     // decrease LBPair liquidityProviderCount if user no longer has bins with liquidity
     if (liquidityPosition.binsCount.equals(BIG_INT_ZERO)) {
-      lbPair.liquidityProviderCount = lbPair.liquidityProviderCount.minus(
-        BIG_INT_ONE
-      );
+      lbPair.liquidityProviderCount =
+        lbPair.liquidityProviderCount.minus(BIG_INT_ONE);
       lbPair.save();
     }
+    liquidityPosition.save();
   }
 
-  // update block and timestamp
-  liquidityPosition.block = block.number.toI32();
-  liquidityPosition.timestamp = block.timestamp.toI32();
-  liquidityPosition.save();
-  userBinLiquidity.block = block.number.toI32();
-  userBinLiquidity.timestamp = block.timestamp.toI32();
   userBinLiquidity.save();
 
   return liquidityPosition as LiquidityPosition;

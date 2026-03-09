@@ -23,8 +23,6 @@ export function getUserBinLiquidity(
     userBinLiquidity.lbPairBinId = lbPairBin.id;
     userBinLiquidity.liquidityPosition = liquidityPositionsId;
     userBinLiquidity.liquidity = BIG_INT_ZERO;
-    userBinLiquidity.block = block.number.toI32();
-    userBinLiquidity.timestamp = block.timestamp.toI32();
     userBinLiquidity.save();
   }
 
