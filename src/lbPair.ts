@@ -840,29 +840,31 @@ export function handleTransferBatch(event: TransferBatch): void {
     return;
   }
 
-  lbPair.txCount = lbPair.txCount.plus(BIG_INT_ONE);
-  lbPair.save();
+  // lbPair.txCount = lbPair.txCount.plus(BIG_INT_ONE);
+  // lbPair.save();
 
-  const lbFactory = loadLBFactory();
-  lbFactory.txCount = lbFactory.txCount.plus(BIG_INT_ONE);
-  lbFactory.save();
+  // const lbFactory = loadLBFactory();
+  // lbFactory.txCount = lbFactory.txCount.plus(BIG_INT_ONE);
+  // lbFactory.save();
 
-  loadTraderJoeHourData(event.block.timestamp, true);
-  loadTraderJoeDayData(event.block.timestamp, true);
-  loadLBPairDayData(event.block.timestamp, lbPair as LBPair, true);
-  loadLBPairHourData(event.block.timestamp, lbPair as LBPair, true);
+  // loadTraderJoeHourData(event.block.timestamp, true);
+  // loadTraderJoeDayData(event.block.timestamp, true);
+  // loadLBPairDayData(event.block.timestamp, lbPair as LBPair, true);
+  // loadLBPairHourData(event.block.timestamp, lbPair as LBPair, true);
 
-  const transaction = loadTransaction(event);
+  // const transaction = loadTransaction(event);
 
-  for (let i = 0; i < event.params.amounts.length; i++) {
+  const amountsLength = event.params.amounts.length;
+
+  for (let i = 0; i < amountsLength; i++) {
     const id = event.params.ids[i];
     const amount = event.params.amounts[i];
     const from = event.params.from;
     const to = event.params.to;
 
-    addLiquidityPosition(event.address, to, id, amount);
+    addLiquidityPosition(lbPair, to, id, amount);
 
-    removeLiquidityPosition(event.address, from, id, amount);
+    removeLiquidityPosition(lbPair, from, id, amount);
 
     const isMint = ADDRESS_ZERO.equals(from);
     const isBurn = ADDRESS_ZERO.equals(to);
@@ -895,29 +897,29 @@ export function handleTransferBatch(event: TransferBatch): void {
       );
     }
 
-    const transfer = new Transfer(
-      transaction.id
-        .concat("#")
-        .concat(lbPair.txCount.toString())
-        .concat("#")
-        .concat(i.toString()),
-    );
-    transfer.transaction = transaction.id;
-    transfer.timestamp = event.block.timestamp.toI32();
-    transfer.lbPair = lbPair.id;
-    transfer.isBatch = true;
-    transfer.batchIndex = i;
-    transfer.isMint = isMint;
-    transfer.isBurn = isBurn;
-    transfer.binId = id;
-    transfer.amount = amount;
-    transfer.sender = event.params.sender;
-    transfer.from = from;
-    transfer.to = to;
-    transfer.origin = event.transaction.from;
-    transfer.logIndex = event.logIndex;
+    // const transfer = new Transfer(
+    //   transaction.id
+    //     .concat("#")
+    //     .concat(lbPair.txCount.toString())
+    //     .concat("#")
+    //     .concat(i.toString()),
+    // );
+    // transfer.transaction = transaction.id;
+    // transfer.timestamp = event.block.timestamp.toI32();
+    // transfer.lbPair = lbPair.id;
+    // transfer.isBatch = true;
+    // transfer.batchIndex = i;
+    // transfer.isMint = isMint;
+    // transfer.isBurn = isBurn;
+    // transfer.binId = id;
+    // transfer.amount = amount;
+    // transfer.sender = event.params.sender;
+    // transfer.from = from;
+    // transfer.to = to;
+    // transfer.origin = event.transaction.from;
+    // transfer.logIndex = event.logIndex;
 
-    transfer.save();
+    // transfer.save();
   }
 }
 

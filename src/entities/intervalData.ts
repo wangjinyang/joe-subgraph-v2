@@ -269,7 +269,6 @@ export function loadLBPairDayData(
     lbPairDayData.volumeTokenY = BIG_DECIMAL_ZERO;
     lbPairDayData.volumeUSD = BIG_DECIMAL_ZERO;
     lbPairDayData.untrackedVolumeUSD = BIG_DECIMAL_ZERO;
-    lbPairDayData.txCount = BIG_INT_ZERO;
     lbPairDayData.feesUSD = BIG_DECIMAL_ZERO;
     lbPairDayData.save();
   }
