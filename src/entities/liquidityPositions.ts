@@ -4,7 +4,10 @@ import { BIG_INT_ZERO, BIG_INT_ONE, ADDRESS_ZERO } from "../constants";
 import { getUserBinLiquidity } from "./userBinLiquidity";
 import { loadUser, loadBin } from "../entities";
 
-function getLiquidityPosition(lbPair: LBPair, user: Address): LiquidityPosition {
+function getLiquidityPosition(
+  lbPair: LBPair,
+  user: Address,
+): LiquidityPosition {
   const id = lbPair.id.concat("-").concat(user.toHexString());
 
   let liquidityPosition = LiquidityPosition.load(id);
@@ -37,8 +40,6 @@ export function addLiquidityPosition(
     return;
   }
 
-  // const bin = loadBin(lbPair, binId.toU32());
-
   let liquidityPosition = getLiquidityPosition(lbPair, userAddr);
   let userBinLiquidity = getUserBinLiquidity(
     lbPair,
@@ -48,29 +49,14 @@ export function addLiquidityPosition(
   );
 
   if (userBinLiquidity.liquidity.equals(BIG_INT_ZERO)) {
-  // add user to list of bin's liquidity providers
-  // let liquidityProviders = bin.liquidityProviders;
-  // liquidityProviders.push(user.id);
-  // bin.liquidityProviders = liquidityProviders;
-  // bin.liquidityProviderCount = bin.liquidityProviderCount.plus(BIG_INT_ONE);
-  // bin.save();
-
-  // increase count of bins user has liquidity
-  liquidityPosition.binsCount = liquidityPosition.binsCount.plus(BIG_INT_ONE);
-
-  // increase LBPair liquidityProviderCount if user now has one bin with liquidity
-  if (liquidityPosition.binsCount.equals(BIG_INT_ONE)) {
-    lbPair.liquidityProviderCount =
-      lbPair.liquidityProviderCount.plus(BIG_INT_ONE);
-    lbPair.save();
-  }
-  liquidityPosition.save();
+    // increase count of bins user has liquidity
+    liquidityPosition.binsCount = liquidityPosition.binsCount.plus(BIG_INT_ONE);
+    liquidityPosition.save();
   }
 
   // update liquidity
   userBinLiquidity.liquidity = userBinLiquidity.liquidity.plus(liquidity);
   userBinLiquidity.save();
-
 }
 
 export function removeLiquidityPosition(
@@ -104,30 +90,12 @@ export function removeLiquidityPosition(
   userBinLiquidity.liquidity = userBinLiquidity.liquidity.minus(liquidity);
 
   if (userBinLiquidity.liquidity.le(BIG_INT_ZERO)) {
-    // remove user from list of bin's liquidity providers
-    // let liquidityProviders = bin.liquidityProviders;
-    // let idxToRemove = liquidityProviders.indexOf(user.id);
-    // if (idxToRemove > -1) {
-    //   liquidityProviders.splice(idxToRemove, 1);
-    //   bin.liquidityProviders = liquidityProviders;
-    //   bin.liquidityProviderCount =
-    //     bin.liquidityProviderCount.minus(BIG_INT_ONE);
-    //   bin.save();
-    // }
-
+    userBinLiquidity.liquidity = BIG_INT_ZERO;
     // decrease count of bins with user's liquidityPosition
     liquidityPosition.binsCount =
       liquidityPosition.binsCount.minus(BIG_INT_ONE);
-
-    // decrease LBPair liquidityProviderCount if user no longer has bins with liquidity
-    if (liquidityPosition.binsCount.equals(BIG_INT_ZERO)) {
-      lbPair.liquidityProviderCount =
-        lbPair.liquidityProviderCount.minus(BIG_INT_ONE);
-      lbPair.save();
-    }
     liquidityPosition.save();
   }
 
   userBinLiquidity.save();
-
 }

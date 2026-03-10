@@ -174,7 +174,6 @@ type LBPair @entity(immutable: false) {
   feesUSD: BigDecimal! # swap fees
   # Fields used to help derived relationship
   # used to detect new exchanges
-  liquidityProviderCount: BigInt!
 
   bins: [Bin!]! @derivedFrom(field: "lbPair")
   liquidityPositions: [LiquidityPosition!]! @derivedFrom(field: "lbPair")
@@ -225,8 +224,6 @@ type Bin @entity(immutable: false) {
 
   binId: Int!
 
-  liquidityProviders: [String!]!
-  liquidityProviderCount: BigInt!
 }
 
 type User @entity(immutable: false) {
