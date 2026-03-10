@@ -91,12 +91,12 @@ export function createLBPair(
   lbPair.volumeTokenY = BIG_DECIMAL_ZERO;
   lbPair.volumeUSD = BIG_DECIMAL_ZERO;
   lbPair.untrackedVolumeUSD = BIG_DECIMAL_ZERO;
-  lbPair.txCount = BIG_INT_ZERO;
   lbPair.feesTokenX = BIG_DECIMAL_ZERO;
   lbPair.feesTokenY = BIG_DECIMAL_ZERO;
   lbPair.feesUSD = BIG_DECIMAL_ZERO;
   lbPair.liquidityProviderCount = BIG_INT_ZERO;
 
+  lbPair.ignored = false;
   lbPair.timestamp = block.timestamp;
   lbPair.block = block.number;
 

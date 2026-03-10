@@ -22,7 +22,6 @@ export function loadLBFactory(id: Address = LBFACTORY_ADDRESS): LBFactory {
     lbFactory.untrackedVolumeUSD = BIG_DECIMAL_ZERO;
     lbFactory.totalValueLockedUSD = BIG_DECIMAL_ZERO;
     lbFactory.totalValueLockedAVAX = BIG_DECIMAL_ZERO;
-    lbFactory.txCount = BIG_INT_ZERO;
     lbFactory.tokenCount = BIG_INT_ZERO;
     lbFactory.userCount = BIG_INT_ZERO;
     if (feeRecipient.reverted) {
@@ -35,7 +34,6 @@ export function loadLBFactory(id: Address = LBFACTORY_ADDRESS): LBFactory {
     } else {
       lbFactory.flashloanFee = flashloanFee.value;
     }
-    lbFactory.ignoredLbPairs = [];
     lbFactory.feesUSD = BIG_DECIMAL_ZERO;
     lbFactory.feesAVAX = BIG_DECIMAL_ZERO;
 

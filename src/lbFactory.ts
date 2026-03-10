@@ -6,8 +6,14 @@ import {
   FeeRecipientSet,
   PresetSet,
 } from "../generated/LBFactory/LBFactory";
-import { loadLBFactory, createLBPair, loadBundle } from "./entities";
+import {
+  loadLBFactory,
+  createLBPair,
+  loadBundle,
+  loadLbPair,
+} from "./entities";
 import { BIG_INT_ONE, BIG_INT_ZERO } from "./constants";
+import { log } from "@graphprotocol/graph-ts";
 
 export function handleFlashLoanFeeSet(event: FlashLoanFeeSet): void {
   const contract = LBFactoryABI.bind(event.address);
@@ -37,31 +43,18 @@ export function handleLBPairCreated(event: LBPairCreated): void {
 }
 
 export function handleLBPairIgnoredStateChanged(
-  event: LBPairIgnoredStateChanged
+  event: LBPairIgnoredStateChanged,
 ): void {
-  const lbFactory = loadLBFactory();
-  const ignoredLbPairs = lbFactory.ignoredLbPairs;
-  const ignoredPair = event.params.LBPair.toHexString();
-  let index = -1;
-  for (let i = 0; i < ignoredLbPairs.length; i++) {
-    if (ignoredLbPairs[i] === ignoredPair) {
-      index = i;
-      break;
-    }
+  const lbPair = loadLbPair(event.params.LBPair);
+  if (!lbPair) {
+    log.error(
+      "LBPairIgnoredStateChanged event received for non-existent LBPair: {}",
+      [event.params.LBPair.toHexString()],
+    );
+    return;
   }
-
-  if (event.params.ignored) {
-    if (index === -1) {
-      ignoredLbPairs.push(ignoredPair);
-    }
-  } else {
-    if (index !== -1) {
-      ignoredLbPairs.splice(index, 1);
-    }
-  }
-  lbFactory.ignoredLbPairs = ignoredLbPairs;
-
-  lbFactory.save();
+  lbPair.ignored = event.params.ignored;
+  lbPair.save();
 }
 
 export function handleFeeRecipientSet(event: FeeRecipientSet): void {

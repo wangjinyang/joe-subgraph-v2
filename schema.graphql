@@ -39,9 +39,6 @@ type LBFactory @entity(immutable: false) {
   # flashloan fee
   flashloanFee: BigInt!
 
-  # pairs not used in trade routing
-  ignoredLbPairs: [LBPair!]!
-
   feesUSD: BigDecimal!
   feesAVAX: BigDecimal!
 
@@ -191,6 +188,9 @@ type LBPair @entity(immutable: false) {
   flashed: [Flash!]! @derivedFrom(field: "lbPair")
   collects: [Collect!]! @derivedFrom(field: "lbPair")
   transfers: [Transfer!]! @derivedFrom(field: "lbPair")
+
+  # pairs not used in trade routing
+  ignored: Boolean!
 
   # Created at
   timestamp: BigInt!
