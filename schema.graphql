@@ -30,9 +30,6 @@ type LBFactory @entity(immutable: false) {
   # tvl AVAX
   totalValueLockedAVAX: BigDecimal!
 
-  # Transaction count
-  txCount: BigInt!
-
   # Token count
   tokenCount: BigInt!
 
@@ -54,36 +51,8 @@ type LBFactory @entity(immutable: false) {
   # Tokens
   tokens: [Token!]! @derivedFrom(field: "factory")
 
-  # Hour data
-  hourData: [TraderJoeHourData!]! @derivedFrom(field: "factory")
-
   # Day data
   dayData: [TraderJoeDayData!]! @derivedFrom(field: "factory")
-}
-
-type TraderJoeHourData @entity(immutable: false) {
-  # timestamp / 3600
-  id: ID!
-
-  # date - hour start timestamp
-  date: Int!
-
-  # factory
-  factory: LBFactory!
-
-  # volume
-  volumeAVAX: BigDecimal!
-  volumeUSD: BigDecimal!
-  untrackedVolumeUSD: BigDecimal!
-
-  # TVL
-  totalValueLockedAVAX: BigDecimal!
-  totalValueLockedUSD: BigDecimal!
-
-  feesUSD: BigDecimal!
-
-  # tx count
-  txCount: BigInt!
 }
 
 type TraderJoeDayData @entity(immutable: false) {
@@ -107,8 +76,6 @@ type TraderJoeDayData @entity(immutable: false) {
 
   feesUSD: BigDecimal!
 
-  # tx count
-  txCount: BigInt!
 }
 
 type Token @entity(immutable: false) {
@@ -131,9 +98,6 @@ type Token @entity(immutable: false) {
   volumeUSD: BigDecimal!
   untrackedVolumeUSD: BigDecimal!
 
-  # transactions across all pairs
-  txCount: BigInt!
-
   # TVL across all pairs
   totalValueLocked: BigDecimal!
   totalValueLockedUSD: BigDecimal!
@@ -142,105 +106,17 @@ type Token @entity(immutable: false) {
 
   feesUSD: BigDecimal!
 
-  # Token hour data
-  hourData: [TokenHourData!]! @derivedFrom(field: "token")
-
-  # Token day data
-  dayData: [TokenDayData!]! @derivedFrom(field: "token")
-
   # Base pairs
   basePairs: [LBPair!]! @derivedFrom(field: "tokenX")
 
   # Quote pairs
   quotePairs: [LBPair!]! @derivedFrom(field: "tokenY")
 
-  # Base pairs hour data
-  basePairsHourData: [LBPairHourData!]! @derivedFrom(field: "tokenX")
-
-  # Quote pairs hour data
-  quotePairsHourData: [LBPairHourData!]! @derivedFrom(field: "tokenY")
-
   # Base pairs day data
   basePairsDayData: [LBPairDayData!]! @derivedFrom(field: "tokenX")
 
   # Quote pairs day data
   quotePairsDayData: [LBPairDayData!]! @derivedFrom(field: "tokenY")
-}
-
-type TokenHourData @entity(immutable: false) {
-  # timestamp / 3600
-  id: ID!
-
-  # date - hour start timestamp
-  date: Int!
-
-  # token
-  token: Token!
-
-  # volume
-  volume: BigDecimal!
-  volumeAVAX: BigDecimal!
-  volumeUSD: BigDecimal!
-
-  # tx count
-  txCount: BigInt!
-
-  # TVL
-  totalValueLocked: BigDecimal!
-  totalValueLockedAVAX: BigDecimal!
-  totalValueLockedUSD: BigDecimal!
-
-  # price usd
-  priceUSD: BigDecimal!
-
-  feesUSD: BigDecimal!
-
-  # opening price USD
-  open: BigDecimal!
-  # high price USD
-  high: BigDecimal!
-  # low price USD
-  low: BigDecimal!
-  # close price USD
-  close: BigDecimal!
-}
-
-type TokenDayData @entity(immutable: false) {
-  # timestamp / 86400
-  id: ID!
-
-  # date - day start timestamp
-  date: Int!
-
-  # token
-  token: Token!
-
-  # volume
-  volume: BigDecimal!
-  volumeAVAX: BigDecimal!
-  volumeUSD: BigDecimal!
-
-  # tx count
-  txCount: BigInt!
-
-  # TVL
-  totalValueLocked: BigDecimal!
-  totalValueLockedAVAX: BigDecimal!
-  totalValueLockedUSD: BigDecimal!
-
-  # price usd
-  priceUSD: BigDecimal!
-
-  feesUSD: BigDecimal!
-
-  # opening price USD
-  open: BigDecimal!
-  # high price USD
-  high: BigDecimal!
-  # low price USD
-  low: BigDecimal!
-  # close price USD
-  close: BigDecimal!
 }
 
 type SJoeDayData @entity(immutable: false) {
@@ -296,7 +172,6 @@ type LBPair @entity(immutable: false) {
   volumeTokenY: BigDecimal!
   volumeUSD: BigDecimal!
   untrackedVolumeUSD: BigDecimal!
-  txCount: BigInt!
   feesTokenX: BigDecimal!
   feesTokenY: BigDecimal!
   feesUSD: BigDecimal! # swap fees
@@ -396,9 +271,6 @@ type LBPairDayData @entity(immutable: false) {
   volumeUSD: BigDecimal!
   untrackedVolumeUSD: BigDecimal!
 
-  # tx count
-  txCount: BigInt!
-
   # swap fees
   feesUSD: BigDecimal!
 }
@@ -430,9 +302,6 @@ type LBPairHourData @entity(immutable: false) {
   # volume usd
   volumeUSD: BigDecimal!
   untrackedVolumeUSD: BigDecimal!
-
-  # tx count
-  txCount: BigInt!
 
   # swap fees
   feesUSD: BigDecimal!
