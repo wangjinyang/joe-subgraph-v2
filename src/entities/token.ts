@@ -29,7 +29,6 @@ export function loadToken(address: Address): Token {
     token.volume = BIG_DECIMAL_ZERO;
     token.volumeUSD = BIG_DECIMAL_ZERO;
     token.untrackedVolumeUSD = BIG_DECIMAL_ZERO;
-    token.txCount = BIG_INT_ZERO;
     token.totalValueLocked = BIG_DECIMAL_ZERO;
     token.totalValueLockedUSD = BIG_DECIMAL_ZERO;
     token.derivedAVAX = BIG_DECIMAL_ZERO;
