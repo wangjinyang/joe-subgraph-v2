@@ -102,7 +102,7 @@ export function createLBPair(
   // generate Bin
   trackBin(
     lbPair,
-    activeId,
+    BigInt.fromU32(activeId),
     BIG_DECIMAL_ZERO,
     BIG_DECIMAL_ZERO,
     BIG_DECIMAL_ZERO,

@@ -134,7 +134,7 @@ export function handleSwap(event: SwapEvent): void {
   // Bin
   const bin = trackBin(
     lbPair as LBPair,
-    event.params.id,
+    BigInt.fromU32(event.params.id),
     fmtAmountXIn,
     fmtAmountXOut,
     fmtAmountYIn,
@@ -462,7 +462,7 @@ export function handleLiquidityAdded(event: DepositedToBins): void {
 
     trackBin(
       lbPair,
-      bidId.toI32(),
+      bidId,
       amountX, // amountXIn
       BIG_DECIMAL_ZERO,
       amountY, // amountYIn
@@ -570,7 +570,7 @@ export function handleLiquidityRemoved(event: WithdrawnFromBins): void {
 
     trackBin(
       lbPair,
-      event.params.ids[i].toU32(),
+      event.params.ids[i],
       BIG_DECIMAL_ZERO,
       fmtAmountX, // amountXOut
       BIG_DECIMAL_ZERO,
@@ -690,17 +690,8 @@ export function handleTransferBatch(event: TransferBatch): void {
     return;
   }
 
-  // lbPair.txCount = lbPair.txCount.plus(BIG_INT_ONE);
-  // lbPair.save();
-
-  // const lbFactory = loadLBFactory();
-  // lbFactory.txCount = lbFactory.txCount.plus(BIG_INT_ONE);
-  // lbFactory.save();
-
-  // loadTraderJoeHourData(event.block.timestamp, true);
   // loadTraderJoeDayData(event.block.timestamp, true);
   // loadLBPairDayData(event.block.timestamp, lbPair as LBPair, true);
-  // loadLBPairHourData(event.block.timestamp, lbPair as LBPair, true);
 
   // const transaction = loadTransaction(event);
 
@@ -723,7 +714,7 @@ export function handleTransferBatch(event: TransferBatch): void {
     if (isMint) {
       trackBin(
         lbPair,
-        id.toU32(),
+        id,
         BIG_DECIMAL_ZERO,
         BIG_DECIMAL_ZERO,
         BIG_DECIMAL_ZERO,
@@ -737,7 +728,7 @@ export function handleTransferBatch(event: TransferBatch): void {
     if (isBurn) {
       trackBin(
         lbPair,
-        id.toU32(),
+        id,
         BIG_DECIMAL_ZERO,
         BIG_DECIMAL_ZERO,
         BIG_DECIMAL_ZERO,

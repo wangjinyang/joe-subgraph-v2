@@ -15,7 +15,7 @@ export function getUserBinLiquidity(
 
   if (!userBinLiquidity) {
     userBinLiquidity = new UserBinLiquidity(id);
-    const lbPairBin = loadBin(lbPair, binId.toU32());
+    const lbPairBin = loadBin(lbPair, binId);
     userBinLiquidity.lbPair = lbPair.id;
     userBinLiquidity.user = user.toHexString();
     userBinLiquidity.binId = binId;

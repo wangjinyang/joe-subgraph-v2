@@ -2,7 +2,6 @@ import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { LiquidityPosition, LBPair, User } from "../../generated/schema";
 import { BIG_INT_ZERO, BIG_INT_ONE, ADDRESS_ZERO } from "../constants";
 import { getUserBinLiquidity } from "./userBinLiquidity";
-import { loadUser, loadBin } from "../entities";
 
 function getLiquidityPosition(
   lbPair: LBPair,
@@ -75,8 +74,6 @@ export function removeLiquidityPosition(
   if (tryLBPair) {
     return;
   }
-
-  // const bin = loadBin(lbPair, binId.toU32());
 
   let liquidityPosition = getLiquidityPosition(lbPair, userAddr);
   let userBinLiquidity = getUserBinLiquidity(
