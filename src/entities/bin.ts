@@ -36,10 +36,10 @@ export function trackBin(
 ): Bin {
   const bin = loadBin(lbPair, binId);
 
-  bin.totalSupply = bin.totalSupply.plus(minted).minus(burned);
-  bin.reserveX = bin.reserveX.plus(amountXIn).minus(amountXOut);
-  bin.reserveY = bin.reserveY.plus(amountYIn).minus(amountYOut);
-  bin.save();
+  // bin.totalSupply = bin.totalSupply.plus(minted).minus(burned);
+  // bin.reserveX = bin.reserveX.plus(amountXIn).minus(amountXOut);
+  // bin.reserveY = bin.reserveY.plus(amountYIn).minus(amountYOut);
+  // bin.save();
 
   return bin as Bin;
 }
