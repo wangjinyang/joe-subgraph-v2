@@ -153,7 +153,7 @@ export function getPriceYOfBin(
   const bpVal = BIG_DECIMAL_ONE.plus(BIN_STEP.div(BASIS_POINT_MAX));
 
   // compute bpVal ** (id - 8388608)
-  const loop = binId.toU32() - REAL_SHIFT;
+  const loop = binId.toI32() - REAL_SHIFT;
   const isPositive = loop > 0;
 
   let result = BIG_DECIMAL_ONE;

@@ -13,7 +13,7 @@ export function loadBin(lbPair: LBPair, binId: BigInt): Bin {
     const tokenY = loadToken(Address.fromString(lbPair.tokenY));
     bin = new Bin(id);
     bin.lbPair = lbPair.id;
-    bin.binId = binId.toU32() as u32;
+    bin.binId = binId.toI32() as i32;
     bin.reserveX = BIG_DECIMAL_ZERO;
     bin.reserveY = BIG_DECIMAL_ZERO;
     bin.totalSupply = BIG_INT_ZERO;

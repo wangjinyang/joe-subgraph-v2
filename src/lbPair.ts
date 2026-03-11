@@ -134,7 +134,7 @@ export function handleSwap(event: SwapEvent): void {
   // Bin
   const bin = trackBin(
     lbPair as LBPair,
-    BigInt.fromU32(event.params.id),
+    BigInt.fromI32(event.params.id),
     fmtAmountXIn,
     fmtAmountXOut,
     fmtAmountYIn,
