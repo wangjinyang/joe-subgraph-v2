@@ -20,7 +20,7 @@ import {
   LBPairParameterSet,
 } from "../generated/schema";
 import {
-  loadBin,
+  // loadBin,
   loadLbPair,
   loadToken,
   loadBundle,
@@ -33,7 +33,7 @@ import {
   addLiquidityPosition,
   removeLiquidityPosition,
   loadTransaction,
-  trackBin,
+  // trackBin,
 } from "./entities";
 import {
   BIG_INT_ONE,
@@ -131,17 +131,17 @@ export function handleSwap(event: SwapEvent): void {
   );
   const trackedVolumeAVAX = safeDiv(trackedVolumeUSD, bundle.avaxPriceUSD);
 
-  // Bin
-  const bin = trackBin(
-    lbPair as LBPair,
-    BigInt.fromI32(event.params.id),
-    fmtAmountXIn,
-    fmtAmountXOut,
-    fmtAmountYIn,
-    fmtAmountYOut,
-    BIG_INT_ZERO,
-    BIG_INT_ZERO,
-  );
+  // // Bin
+  // const bin = trackBin(
+  //   lbPair as LBPair,
+  //   BigInt.fromI32(event.params.id),
+  //   fmtAmountXIn,
+  //   fmtAmountXOut,
+  //   fmtAmountYIn,
+  //   fmtAmountYOut,
+  //   BIG_INT_ZERO,
+  //   BIG_INT_ZERO,
+  // );
 
   // LBPair
   lbPair.activeId = event.params.id;
@@ -157,8 +157,8 @@ export function handleSwap(event: SwapEvent): void {
     lbPair.totalValueLockedUSD,
     bundle.avaxPriceUSD,
   );
-  lbPair.tokenXPrice = bin.priceX;
-  lbPair.tokenYPrice = bin.priceY;
+  // lbPair.tokenXPrice = bin.priceX;
+  // lbPair.tokenYPrice = bin.priceY;
   lbPair.volumeTokenX = lbPair.volumeTokenX.plus(amountXTotal);
   lbPair.volumeTokenY = lbPair.volumeTokenY.plus(amountYTotal);
   lbPair.volumeUSD = lbPair.volumeUSD.plus(trackedVolumeUSD);
@@ -460,16 +460,16 @@ export function handleLiquidityAdded(event: DepositedToBins): void {
     totalAmountX = totalAmountX.plus(amountX);
     totalAmountY = totalAmountY.plus(amountY);
 
-    trackBin(
-      lbPair,
-      bidId,
-      amountX, // amountXIn
-      BIG_DECIMAL_ZERO,
-      amountY, // amountYIn
-      BIG_DECIMAL_ZERO,
-      BIG_INT_ZERO,
-      BIG_INT_ZERO,
-    );
+    // trackBin(
+    //   lbPair,
+    //   bidId,
+    //   amountX, // amountXIn
+    //   BIG_DECIMAL_ZERO,
+    //   amountY, // amountYIn
+    //   BIG_DECIMAL_ZERO,
+    //   BIG_INT_ZERO,
+    //   BIG_INT_ZERO,
+    // );
   }
 
   // reset tvl aggregates until new amounts calculated
@@ -568,16 +568,16 @@ export function handleLiquidityRemoved(event: WithdrawnFromBins): void {
     totalAmountX = totalAmountX.plus(fmtAmountX);
     totalAmountY = totalAmountY.plus(fmtAmountY);
 
-    trackBin(
-      lbPair,
-      event.params.ids[i],
-      BIG_DECIMAL_ZERO,
-      fmtAmountX, // amountXOut
-      BIG_DECIMAL_ZERO,
-      fmtAmountY, // amountYOut
-      BIG_INT_ZERO,
-      BIG_INT_ZERO,
-    );
+    // trackBin(
+    //   lbPair,
+    //   event.params.ids[i],
+    //   BIG_DECIMAL_ZERO,
+    //   fmtAmountX, // amountXOut
+    //   BIG_DECIMAL_ZERO,
+    //   fmtAmountY, // amountYOut
+    //   BIG_INT_ZERO,
+    //   BIG_INT_ZERO,
+    // );
   }
 
   // reset tvl aggregates until new amounts calculated
@@ -710,33 +710,33 @@ export function handleTransferBatch(event: TransferBatch): void {
     const isMint = ADDRESS_ZERO.equals(from);
     const isBurn = ADDRESS_ZERO.equals(to);
 
-    // mint: increase bin totalSupply
-    if (isMint) {
-      trackBin(
-        lbPair,
-        id,
-        BIG_DECIMAL_ZERO,
-        BIG_DECIMAL_ZERO,
-        BIG_DECIMAL_ZERO,
-        BIG_DECIMAL_ZERO,
-        amount, // minted
-        BIG_INT_ZERO,
-      );
-    }
+    // // mint: increase bin totalSupply
+    // if (isMint) {
+    //   trackBin(
+    //     lbPair,
+    //     id,
+    //     BIG_DECIMAL_ZERO,
+    //     BIG_DECIMAL_ZERO,
+    //     BIG_DECIMAL_ZERO,
+    //     BIG_DECIMAL_ZERO,
+    //     amount, // minted
+    //     BIG_INT_ZERO,
+    //   );
+    // }
 
-    // burn: decrease bin totalSupply
-    if (isBurn) {
-      trackBin(
-        lbPair,
-        id,
-        BIG_DECIMAL_ZERO,
-        BIG_DECIMAL_ZERO,
-        BIG_DECIMAL_ZERO,
-        BIG_DECIMAL_ZERO,
-        BIG_INT_ZERO,
-        amount, // burned
-      );
-    }
+    // // burn: decrease bin totalSupply
+    // if (isBurn) {
+    //   trackBin(
+    //     lbPair,
+    //     id,
+    //     BIG_DECIMAL_ZERO,
+    //     BIG_DECIMAL_ZERO,
+    //     BIG_DECIMAL_ZERO,
+    //     BIG_DECIMAL_ZERO,
+    //     BIG_INT_ZERO,
+    //     amount, // burned
+    //   );
+    // }
 
     // const transfer = new Transfer(
     //   transaction.id

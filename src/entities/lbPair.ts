@@ -9,7 +9,7 @@ import {
   LBFACTORY_ADDRESS,
 } from "../constants";
 import { loadToken } from "./token";
-import { trackBin } from "./bin";
+// import { trackBin } from "./bin";
 import { LBPair as LBPairABI } from "../../generated/LBFactory/LBPair";
 
 export function loadLbPair(id: Address): LBPair | null {
@@ -99,17 +99,17 @@ export function createLBPair(
   lbPair.timestamp = block.timestamp;
   lbPair.block = block.number;
 
-  // generate Bin
-  trackBin(
-    lbPair,
-    BigInt.fromI32(activeId),
-    BIG_DECIMAL_ZERO,
-    BIG_DECIMAL_ZERO,
-    BIG_DECIMAL_ZERO,
-    BIG_DECIMAL_ZERO,
-    BIG_INT_ZERO,
-    BIG_INT_ZERO
-  );
+  // // generate Bin
+  // trackBin(
+  //   lbPair,
+  //   BigInt.fromI32(activeId),
+  //   BIG_DECIMAL_ZERO,
+  //   BIG_DECIMAL_ZERO,
+  //   BIG_DECIMAL_ZERO,
+  //   BIG_DECIMAL_ZERO,
+  //   BIG_INT_ZERO,
+  //   BIG_INT_ZERO
+  // );
 
   lbPair.save();
 

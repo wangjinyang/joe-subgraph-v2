@@ -324,7 +324,7 @@ type UserBinLiquidity @entity(immutable: false) {
   liquidityPosition: LiquidityPosition!
 
   # lbPair address + binId
-  lbPairBinId: Bin!
+  # lbPairBinId: Bin!
 
   lbPair: LBPair!
   user: User!
