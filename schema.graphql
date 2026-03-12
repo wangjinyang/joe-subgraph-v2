@@ -313,7 +313,7 @@ type LiquidityPosition @entity(immutable: false) {
   # user's bins liquidities
   userBinLiquidities: [UserBinLiquidity!]!
     @derivedFrom(field: "liquidityPosition")
-  binsCount: BigInt!
+  # binsCount: BigInt!
 }
 
 type UserBinLiquidity @entity(immutable: false) {

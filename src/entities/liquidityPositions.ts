@@ -1,13 +1,20 @@
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { LiquidityPosition, LBPair, User } from "../../generated/schema";
 import { BIG_INT_ZERO, BIG_INT_ONE, ADDRESS_ZERO } from "../constants";
-import { getUserBinLiquidity } from "./userBinLiquidity";
+import {
+  getUserBinLiquidity,
+  removeUserBinLiquidity,
+} from "./userBinLiquidity";
+
+function getLiquidityPositionId(lbPair: LBPair, user: Address): string {
+  return lbPair.id.concat("-").concat(user.toHexString());
+}
 
 function getLiquidityPosition(
   lbPair: LBPair,
   user: Address,
 ): LiquidityPosition {
-  const id = lbPair.id.concat("-").concat(user.toHexString());
+  const id = getLiquidityPositionId(lbPair, user);
 
   let liquidityPosition = LiquidityPosition.load(id);
 
@@ -15,7 +22,7 @@ function getLiquidityPosition(
     liquidityPosition = new LiquidityPosition(id);
     liquidityPosition.user = user.toHexString();
     liquidityPosition.lbPair = lbPair.id;
-    liquidityPosition.binsCount = BIG_INT_ZERO;
+    // liquidityPosition.binsCount = BIG_INT_ZERO;
     liquidityPosition.save();
   }
 
@@ -39,19 +46,28 @@ export function addLiquidityPosition(
     return;
   }
 
-  let liquidityPosition = getLiquidityPosition(lbPair, userAddr);
+  const liquidityPositionId = getLiquidityPositionId(lbPair, userAddr);
+
+  if (LiquidityPosition.load(liquidityPositionId) == null) {
+    const liquidityPosition = new LiquidityPosition(liquidityPositionId);
+    liquidityPosition.user = userAddr.toHexString();
+    liquidityPosition.lbPair = lbPair.id;
+    // liquidityPosition.binsCount = BIG_INT_ZERO;
+    liquidityPosition.save();
+  }
+
   let userBinLiquidity = getUserBinLiquidity(
     lbPair,
-    liquidityPosition.id,
+    liquidityPositionId,
     userAddr,
     binId,
   );
 
-  if (userBinLiquidity.liquidity.equals(BIG_INT_ZERO)) {
-    // increase count of bins user has liquidity
-    liquidityPosition.binsCount = liquidityPosition.binsCount.plus(BIG_INT_ONE);
-    liquidityPosition.save();
-  }
+  // if (userBinLiquidity.liquidity.equals(BIG_INT_ZERO)) {
+  //   // increase count of bins user has liquidity
+  //   liquidityPosition.binsCount = liquidityPosition.binsCount.plus(BIG_INT_ONE);
+  //   liquidityPosition.save();
+  // }
 
   // update liquidity
   userBinLiquidity.liquidity = userBinLiquidity.liquidity.plus(liquidity);
@@ -75,10 +91,10 @@ export function removeLiquidityPosition(
     return;
   }
 
-  let liquidityPosition = getLiquidityPosition(lbPair, userAddr);
+  // let liquidityPosition = getLiquidityPosition(lbPair, userAddr);
   let userBinLiquidity = getUserBinLiquidity(
     lbPair,
-    liquidityPosition.id,
+    getLiquidityPositionId(lbPair, userAddr),
     userAddr,
     binId,
   );
@@ -87,11 +103,12 @@ export function removeLiquidityPosition(
   userBinLiquidity.liquidity = userBinLiquidity.liquidity.minus(liquidity);
 
   if (userBinLiquidity.liquidity.le(BIG_INT_ZERO)) {
-    userBinLiquidity.liquidity = BIG_INT_ZERO;
     // decrease count of bins with user's liquidityPosition
-    liquidityPosition.binsCount =
-      liquidityPosition.binsCount.minus(BIG_INT_ONE);
-    liquidityPosition.save();
+    // liquidityPosition.binsCount =
+    //   liquidityPosition.binsCount.minus(BIG_INT_ONE);
+    // liquidityPosition.save();
+    removeUserBinLiquidity(userBinLiquidity.id);
+    return;
   }
 
   userBinLiquidity.save();

@@ -707,8 +707,8 @@ export function handleTransferBatch(event: TransferBatch): void {
 
     removeLiquidityPosition(lbPair, from, id, amount);
 
-    const isMint = ADDRESS_ZERO.equals(from);
-    const isBurn = ADDRESS_ZERO.equals(to);
+    // const isMint = ADDRESS_ZERO.equals(from);
+    // const isBurn = ADDRESS_ZERO.equals(to);
 
     // // mint: increase bin totalSupply
     // if (isMint) {
