@@ -177,6 +177,7 @@ type LBPair @entity(immutable: false) {
 
   bins: [Bin!]! @derivedFrom(field: "lbPair")
   liquidityPositions: [LiquidityPosition!]! @derivedFrom(field: "lbPair")
+  liquidityUpdateds: [LiquidityUpdated!] @derivedFrom(field: "lbPair")
   dayData: [LBPairDayData!]! @derivedFrom(field: "lbPair")
   hourData: [LBPairHourData!]! @derivedFrom(field: "lbPair")
 
@@ -331,6 +332,28 @@ type UserBinLiquidity @entity(immutable: false) {
   binId: BigInt!
   liquidity: BigInt!
 
+}
+
+enum LiquidityUpdatedType {
+  Added
+  Removed
+} 
+
+type LiquidityUpdated @entity(immutable: true) {
+  # transaction hash + "#" + user address + "#" + log index
+  id: ID!
+  transaction: String!
+  timestamp: Int! # need this to pull recent txns for specific token or pair
+  # pair
+  lbPair: LBPair!
+  user: User!
+
+  amountX: BigDecimal!
+  amountY: BigDecimal!
+
+  type: LiquidityUpdatedType!
+
+  logIndex: BigInt!
 }
 
 type Mint @entity(immutable: true) {

@@ -18,6 +18,7 @@ import {
   Collect,
   Transfer,
   LBPairParameterSet,
+  LiquidityUpdated,
 } from "../generated/schema";
 import {
   // loadBin,
@@ -243,8 +244,6 @@ export function handleSwap(event: SwapEvent): void {
   tokenX.save();
   tokenY.save();
 
-  // User
-  loadUser(event.params.to);
 
   // Swap
   const swap = new Swap(
@@ -533,7 +532,25 @@ export function handleLiquidityAdded(event: DepositedToBins): void {
   tokenY.save();
 
   // User
-  loadUser(event.params.to);
+  // loadUser(event.params.to);
+
+  const liquidityAdded = new LiquidityUpdated(
+    event.transaction.hash
+      .toHexString()
+      .concat("#")
+      .concat(event.params.to.toHexString())
+      .concat("#")
+      .concat(event.logIndex.toString()),
+  );
+  liquidityAdded.transaction = event.transaction.hash.toHexString();
+  liquidityAdded.timestamp = event.block.timestamp.toI32();
+  liquidityAdded.lbPair = lbPair.id;
+  liquidityAdded.user = event.params.to.toHexString();
+  liquidityAdded.amountX = totalAmountX;
+  liquidityAdded.amountY = totalAmountY;
+  liquidityAdded.type = "Added";
+  liquidityAdded.logIndex = event.logIndex;
+  liquidityAdded.save();
 }
 
 export function handleLiquidityRemoved(event: WithdrawnFromBins): void {
@@ -641,7 +658,25 @@ export function handleLiquidityRemoved(event: WithdrawnFromBins): void {
   tokenY.save();
 
   // User
-  loadUser(event.params.to);
+  // loadUser(event.params.to);
+
+  const liquidityRemoved = new LiquidityUpdated(
+    event.transaction.hash
+      .toHexString()
+      .concat("#")
+      .concat(event.params.to.toHexString())
+      .concat("#")
+      .concat(event.logIndex.toString()),
+  );
+  liquidityRemoved.transaction = event.transaction.hash.toHexString();
+  liquidityRemoved.timestamp = event.block.timestamp.toI32();
+  liquidityRemoved.lbPair = lbPair.id;
+  liquidityRemoved.user = event.params.to.toHexString();
+  liquidityRemoved.amountX = totalAmountX;
+  liquidityRemoved.amountY = totalAmountY;
+  liquidityRemoved.type = "Removed";
+  liquidityRemoved.logIndex = event.logIndex;
+  liquidityRemoved.save();
 }
 
 export function handleProtocolFeesCollected(
