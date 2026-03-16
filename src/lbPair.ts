@@ -32,7 +32,6 @@ import {
   loadLBPairHourData,
   addLiquidityPosition,
   removeLiquidityPosition,
-  loadTransaction,
   // trackBin,
 } from "./entities";
 import {
@@ -247,14 +246,14 @@ export function handleSwap(event: SwapEvent): void {
   // User
   loadUser(event.params.to);
 
-  // Transaction
-  const transaction = loadTransaction(event);
-
   // Swap
   const swap = new Swap(
-    transaction.id.concat("#").concat(event.logIndex.toString()),
+    event.transaction.hash
+      .toHexString()
+      .concat("#")
+      .concat(event.logIndex.toString()),
   );
-  swap.transaction = transaction.id;
+  swap.transaction = event.transaction.hash.toHexString();
   swap.timestamp = event.block.timestamp.toI32();
   swap.lbPair = lbPair.id;
   swap.sender = event.params.sender;
@@ -338,12 +337,13 @@ export function handleFlashLoan(event: FlashLoan): void {
   lbPairDayData.feesUSD = lbPairDayData.feesUSD.plus(feesUSD);
   lbPairDayData.save();
 
-  const transaction = loadTransaction(event);
-
   const flashloan = new Flash(
-    transaction.id.concat("#").concat(event.logIndex.toString()),
+    event.transaction.hash
+      .toHexString()
+      .concat("#")
+      .concat(event.logIndex.toString()),
   );
-  flashloan.transaction = transaction.id;
+  flashloan.transaction = event.transaction.hash.toHexString();
   flashloan.timestamp = event.block.timestamp.toI32();
   flashloan.lbPair = lbPair.id;
   flashloan.sender = event.params.sender;
@@ -693,8 +693,6 @@ export function handleTransferBatch(event: TransferBatch): void {
   // loadTraderJoeDayData(event.block.timestamp, true);
   // loadLBPairDayData(event.block.timestamp, lbPair as LBPair, true);
 
-  // const transaction = loadTransaction(event);
-
   const amountsLength = event.params.amounts.length;
 
   for (let i = 0; i < amountsLength; i++) {
@@ -739,13 +737,14 @@ export function handleTransferBatch(event: TransferBatch): void {
     // }
 
     // const transfer = new Transfer(
-    //   transaction.id
+    //   event.transaction.hash
+    //     .toHexString()
     //     .concat("#")
     //     .concat(lbPair.txCount.toString())
     //     .concat("#")
     //     .concat(i.toString()),
     // );
-    // transfer.transaction = transaction.id;
+    // transfer.transaction = event.transaction.hash.toHexString();
     // transfer.timestamp = event.block.timestamp.toI32();
     // transfer.lbPair = lbPair.id;
     // transfer.isBatch = true;

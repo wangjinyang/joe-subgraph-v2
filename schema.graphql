@@ -333,26 +333,10 @@ type UserBinLiquidity @entity(immutable: false) {
 
 }
 
-type Transaction @entity(immutable: true) {
-  # transaction hash
-  id: ID!
-
-  # block info
-  blockNumber: Int!
-  timestamp: Int!
-
-  mints: [Mint!]! @derivedFrom(field: "transaction")
-  burns: [Burn!]! @derivedFrom(field: "transaction")
-  swaps: [Swap!]! @derivedFrom(field: "transaction")
-  flashed: [Flash!]! @derivedFrom(field: "transaction")
-  collects: [Collect!]! @derivedFrom(field: "transaction")
-  transfers: [Transfer!]! @derivedFrom(field: "transaction")
-}
-
 type Mint @entity(immutable: true) {
   # transaction hash + "#" + index in mints Transaction array
   id: ID!
-  transaction: Transaction!
+  transaction: String!
   timestamp: Int! # need this to pull recent txns for specific token or pair
   # pair
   lbPair: LBPair!
@@ -376,7 +360,7 @@ type Mint @entity(immutable: true) {
 type Burn @entity(immutable: true) {
   # transaction hash + "#" + index in burns Transaction array
   id: ID!
-  transaction: Transaction!
+  transaction: String!
   timestamp: Int! # need this to pull recent txns for specific token or pair
   # pair
   lbPair: LBPair!
@@ -400,7 +384,7 @@ type Burn @entity(immutable: true) {
 type Swap @entity(immutable: true) {
   # transaction hash + "#" + index in swaps Transaction array
   id: ID!
-  transaction: Transaction!
+  transaction: String!
   timestamp: Int! # need this to pull recent txns for specific token or pair
   # pair
   lbPair: LBPair!
@@ -427,7 +411,7 @@ type Swap @entity(immutable: true) {
 type Flash @entity(immutable: true) {
   # transaction hash + "#" + index in Flash Transaction array
   id: ID!
-  transaction: Transaction!
+  transaction: String!
   timestamp: Int! # need this to pull recent txns for specific token or pair
   # pair
   lbPair: LBPair!
@@ -451,7 +435,7 @@ type Flash @entity(immutable: true) {
 type Collect @entity(immutable: true) {
   # transaction hash + "#" + index in collect Transaction array
   id: ID!
-  transaction: Transaction!
+  transaction: String!
   timestamp: Int!
 
   lbPair: LBPair!
@@ -472,7 +456,7 @@ type Collect @entity(immutable: true) {
 type Transfer @entity(immutable: true) {
   # transaction hash + "#" + index in transfer Transaction array + "#" + (optional: TransferBatch index)
   id: ID!
-  transaction: Transaction!
+  transaction: String!
   timestamp: Int!
 
   isBatch: Boolean!

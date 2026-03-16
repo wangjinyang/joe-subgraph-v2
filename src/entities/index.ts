@@ -6,5 +6,4 @@ export * from "./intervalData";
 export * from "./user";
 export * from "./liquidityPositions";
 export * from "./userBinLiquidity";
-export * from "./transaction";
 export * from "./bin";
