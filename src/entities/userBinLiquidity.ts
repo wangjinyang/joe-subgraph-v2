@@ -3,13 +3,20 @@ import { UserBinLiquidity, LBPair, User } from "../../generated/schema";
 import { BIG_INT_ZERO } from "../constants";
 // import { loadBin } from "./bin";
 
+export function getUserBinLiquidityID(
+  liquidityPositionsId: string,
+  binId: BigInt
+): string {
+  return liquidityPositionsId.concat("-").concat(binId.toString());
+}
+
 export function getUserBinLiquidity(
   lbPair: LBPair,
   liquidityPositionsId: string,
   user: Address,
   binId: BigInt,
 ): UserBinLiquidity {
-  const id = liquidityPositionsId.concat("-").concat(binId.toString());
+  const id = getUserBinLiquidityID(liquidityPositionsId, binId);
 
   let userBinLiquidity = UserBinLiquidity.load(id);
 
@@ -22,10 +29,9 @@ export function getUserBinLiquidity(
     // userBinLiquidity.lbPairBinId = lbPairBin.id;
     userBinLiquidity.liquidityPosition = liquidityPositionsId;
     userBinLiquidity.liquidity = BIG_INT_ZERO;
-    userBinLiquidity.save();
   }
 
-  return userBinLiquidity as UserBinLiquidity;
+  return userBinLiquidity;
 }
 
 export function removeUserBinLiquidity(id: string): void {

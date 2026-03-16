@@ -111,7 +111,5 @@ export function createLBPair(
   //   BIG_INT_ZERO
   // );
 
-  lbPair.save();
-
-  return lbPair as LBPair;
+  return lbPair;
 }

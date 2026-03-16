@@ -19,6 +19,7 @@ import {
   Transfer,
   LBPairParameterSet,
   LiquidityUpdated,
+  User,
 } from "../generated/schema";
 import {
   // loadBin,
@@ -28,7 +29,6 @@ import {
   loadLBFactory,
   loadTraderJoeDayData,
   loadSJoeDayData,
-  loadUser,
   loadLBPairDayData,
   loadLBPairHourData,
   addLiquidityPosition,
@@ -243,7 +243,6 @@ export function handleSwap(event: SwapEvent): void {
 
   tokenX.save();
   tokenY.save();
-
 
   // Swap
   const swap = new Swap(
@@ -532,7 +531,14 @@ export function handleLiquidityAdded(event: DepositedToBins): void {
   tokenY.save();
 
   // User
-  // loadUser(event.params.to);
+  let user = User.load(event.params.to.toHexString());
+
+  if (!user) {
+    user = new User(event.params.to.toHexString());
+    lbFactory.userCount = lbFactory.userCount.plus(BIG_INT_ONE);
+    lbFactory.save();
+    user.save();
+  }
 
   const liquidityAdded = new LiquidityUpdated(
     event.transaction.hash
@@ -545,7 +551,7 @@ export function handleLiquidityAdded(event: DepositedToBins): void {
   liquidityAdded.transaction = event.transaction.hash.toHexString();
   liquidityAdded.timestamp = event.block.timestamp.toI32();
   liquidityAdded.lbPair = lbPair.id;
-  liquidityAdded.user = event.params.to.toHexString();
+  liquidityAdded.user = user.id;
   liquidityAdded.amountX = totalAmountX;
   liquidityAdded.amountY = totalAmountY;
   liquidityAdded.type = "Added";
@@ -658,7 +664,14 @@ export function handleLiquidityRemoved(event: WithdrawnFromBins): void {
   tokenY.save();
 
   // User
-  // loadUser(event.params.to);
+  let user = User.load(event.params.to.toHexString());
+
+  if (!user) {
+    user = new User(event.params.to.toHexString());
+    lbFactory.userCount = lbFactory.userCount.plus(BIG_INT_ONE);
+    lbFactory.save();
+    user.save();
+  }
 
   const liquidityRemoved = new LiquidityUpdated(
     event.transaction.hash
@@ -671,7 +684,7 @@ export function handleLiquidityRemoved(event: WithdrawnFromBins): void {
   liquidityRemoved.transaction = event.transaction.hash.toHexString();
   liquidityRemoved.timestamp = event.block.timestamp.toI32();
   liquidityRemoved.lbPair = lbPair.id;
-  liquidityRemoved.user = event.params.to.toHexString();
+  liquidityRemoved.user = user.id;
   liquidityRemoved.amountX = totalAmountX;
   liquidityRemoved.amountY = totalAmountY;
   liquidityRemoved.type = "Removed";

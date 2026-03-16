@@ -3,7 +3,6 @@ export * from "./lbPair";
 export * from "./token";
 export * from "./bundle";
 export * from "./intervalData";
-export * from "./user";
 export * from "./liquidityPositions";
 export * from "./userBinLiquidity";
 export * from "./bin";

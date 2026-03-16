@@ -30,9 +30,6 @@ type LBFactory @entity(immutable: false) {
   # tvl AVAX
   totalValueLockedAVAX: BigDecimal!
 
-  # Token count
-  tokenCount: BigInt!
-
   # User count
   userCount: BigInt!
 
@@ -44,9 +41,6 @@ type LBFactory @entity(immutable: false) {
 
   # Pairs
   lbPairs: [LBPair!]! @derivedFrom(field: "factory")
-
-  # Tokens
-  tokens: [Token!]! @derivedFrom(field: "factory")
 
   # Day data
   dayData: [TraderJoeDayData!]! @derivedFrom(field: "factory")
@@ -78,9 +72,6 @@ type TraderJoeDayData @entity(immutable: false) {
 type Token @entity(immutable: false) {
   # token address
   id: ID!
-
-  # factory
-  factory: LBFactory!
 
   # mirrored from the smart contract
   symbol: String!
@@ -230,9 +221,6 @@ type Bin @entity(immutable: false) {
 type User @entity(immutable: false) {
   # Address
   id: ID!
-
-  # Approval for All
-  lbTokenApprovals: [Bytes!]!
 
   # Liquidity Positions
   liquidityPositions: [LiquidityPosition!]! @derivedFrom(field: "user")

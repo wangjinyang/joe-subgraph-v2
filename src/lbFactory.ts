@@ -36,7 +36,7 @@ export function handleLBPairCreated(event: LBPairCreated): void {
   if (!lbPair) {
     return;
   }
-
+  lbPair.save();
   const lbFactory = loadLBFactory();
   lbFactory.pairCount = lbFactory.pairCount.plus(BIG_INT_ONE);
   lbFactory.save();

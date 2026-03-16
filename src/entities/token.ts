@@ -1,6 +1,5 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { Token } from "../../generated/schema";
-import { loadLBFactory } from "./lbFactory";
 import {
   BIG_INT_ONE,
   BIG_INT_ZERO,
@@ -15,12 +14,7 @@ export function loadToken(address: Address): Token {
   let token = Token.load(address.toHexString());
 
   if (!token) {
-    const lbFactory = loadLBFactory();
-    lbFactory.tokenCount = lbFactory.tokenCount.plus(BIG_INT_ONE);
-    lbFactory.save();
-
     token = new Token(address.toHexString());
-    token.factory = lbFactory.id;
     token.symbol = getSymbol(address);
     token.name = getName(address);
     token.decimals = getDecimals(address);
@@ -33,11 +27,10 @@ export function loadToken(address: Address): Token {
     token.totalValueLockedUSD = BIG_DECIMAL_ZERO;
     token.derivedAVAX = BIG_DECIMAL_ZERO;
     token.feesUSD = BIG_DECIMAL_ZERO;
-
     token.save();
   }
 
-  return token as Token;
+  return token;
 }
 
 export function getSymbol(address: Address): string {
