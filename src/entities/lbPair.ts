@@ -108,7 +108,9 @@ export function createLBPair(
   //   BIG_DECIMAL_ZERO,
   //   BIG_DECIMAL_ZERO,
   //   BIG_INT_ZERO,
-  //   BIG_INT_ZERO
+  //   BIG_INT_ZERO,
+  //   BIG_DECIMAL_ZERO,
+  //   BIG_DECIMAL_ZERO
   // );
 
   return lbPair;

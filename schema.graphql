@@ -214,6 +214,9 @@ type Bin @entity(immutable: false) {
   reserveX: BigDecimal!
   reserveY: BigDecimal!
 
+  feesTokenX: BigDecimal!
+  feesTokenY: BigDecimal!
+
   binId: Int!
 
 }
@@ -313,7 +316,7 @@ type UserBinLiquidity @entity(immutable: false) {
   liquidityPosition: LiquidityPosition!
 
   # lbPair address + binId
-  # lbPairBinId: Bin!
+  lbPairBinId: Bin!
 
   lbPair: LBPair!
   user: User!
